@@ -1,4 +1,5 @@
-<%--
+<%@ page import="com.example.model.CategoryModel" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: nals_macbook_284
   Date: 11/06/2022
@@ -12,9 +13,23 @@
 </head>
 <body>
 <form action="" method="post">
-    <lable>id:</lable><input type="text" name="id"><br>
-    <lable>name:</lable><input type="text" name="name"><br>
-    <lable>category:</lable><input type="text" name="category"><br>
+    <lable>name:</lable>
+    <input type="text" name="name"><br>
+    <lable>category:</lable>
+    <select name="category_id">
+        <%
+            List<CategoryModel> list = (List<CategoryModel>) request.getAttribute("listCategory");
+            for (CategoryModel item : list) {
+        %>
+        <option value="<%=item.getId()%>"><%=item.getName()%>
+        </option>
+        <%
+            }
+        %>
+
+
+    </select>
+    <br>
     <input type="submit">
 </form>
 </body>

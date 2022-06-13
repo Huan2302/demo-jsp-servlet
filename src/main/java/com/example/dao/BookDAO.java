@@ -1,6 +1,7 @@
 package com.example.dao;
 
 import com.example.model.BookModel;
+import com.example.model.CategoryModel;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,26 +12,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookDAO {
-
-    protected static Connection getConnection()
-            throws ClassNotFoundException, SQLException {
-
-        String dbDriver = "org.postgresql.Driver";
-        String dbURL = "jdbc:postgresql://localhost:5432/";
-
-        String dbName = "demo";
-        String dbUsername = "postgres";
-        String dbPassword = "r00t";
-
-        Class.forName(dbDriver);
-        return DriverManager.getConnection(dbURL + dbName,
-                                           dbUsername,
-                                           dbPassword);
-    }
-
+public class BookDAO
+    extends BaseDAO {
     public List<BookModel> findAll() {
-        String sql = "SELECT * FROM book";
+        String sql = "SELECT book.id bid, book.name bname, category.id cid, category.name cname "
+            + "FROM book inner join category on book.category_id = category.id";
         try {
             Connection conn = getConnection();
             Statement stmt = conn.createStatement();// tạo kết nối đế truy vấn
@@ -39,9 +25,12 @@ public class BookDAO {
             List<BookModel> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(BookModel.builder()
-                                  .id(rs.getInt("id"))
-                                  .name(rs.getString("name"))
-                                  .category(rs.getString("category"))
+                                  .id(rs.getInt("bid"))
+                                  .name(rs.getString("bname"))
+                                  .category(CategoryModel.builder()
+                                                         .id(rs.getInt("cid"))
+                                                         .name(rs.getString("cname"))
+                                                         .build())
                                   .build());
             }
             return list;
@@ -50,17 +39,17 @@ public class BookDAO {
         }
         return null;
     }// 1, sasch a , truyen tranh
+
     public void insert(BookModel bookModel) {
-        String sql = "insert into book(id,name,category) values (?, ?, ?)";
+        String sql = "insert into book(name,category_id) values ( ?, ?)";
         PreparedStatement st = null;
         Connection con = null;
         try {
             con = getConnection();
             st = con.prepareStatement(sql);
 
-            st.setInt(1, bookModel.getId());
-            st.setString(2, bookModel.getName());
-            st.setString(3, bookModel.getCategory());
+            st.setString(1, bookModel.getName());
+            st.setInt(2, bookModel.getCategory().getId());
             st.executeUpdate();
 
         } catch (Exception e) {

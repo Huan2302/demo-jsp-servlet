@@ -11,8 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookModel {
+public class CategoryModel {
     private int id;
     private String name;
-    private CategoryModel category;
 }

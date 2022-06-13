@@ -1,7 +1,9 @@
 package com.example.controller;
 
 import com.example.dao.BookDAO;
+import com.example.dao.CategoryDAO;
 import com.example.model.BookModel;
+import com.example.model.CategoryModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +21,7 @@ public class AddBookController
             throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
+        req.setAttribute("listCategory", new CategoryDAO().findAll());
         req.getRequestDispatcher("addBook.jsp").forward(req, resp);
     }
 
@@ -27,14 +30,14 @@ public class AddBookController
             throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
-        int id = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
-        String category = req.getParameter("category");
+        int category_id = Integer.parseInt(req.getParameter("category_id")); // id=1
+
+        CategoryModel categoryModel = new CategoryDAO().findOne(category_id);
 
         new BookDAO().insert(BookModel.builder()
-                                      .id(id)
                                       .name(name)
-                                      .category(category)
+                                      .category(categoryModel)
                                       .build());
         //bắt buộc mình phải gửi attribute là listBook. mới hiểu
 //        req.getRequestDispatcher("home.jsp").forward(req, resp);

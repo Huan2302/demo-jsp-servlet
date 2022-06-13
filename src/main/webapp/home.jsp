@@ -20,17 +20,23 @@
     </tr>
     <%
         List<BookModel> list = (List<BookModel>) request.getAttribute("listBook");
-        for (BookModel item : list) {
+        if (list != null) {
+            for (BookModel item : list) {
     %>
-        <tr>
-            <td><%=item.getId()%></td>
-            <td><%=item.getName()%></td>
-            <td><%=item.getCategory()%></td>
-        </tr>
+    <tr>
+        <td><%=item.getId()%>
+        </td>
+        <td><%=item.getName()%>
+        </td>
+        <td><%=item.getCategory().getName()%>
+        </td>
+    </tr>
     <%
+            }
         }
     %>
 </table>
-<a href="<%=request.getContextPath()%>/add-book">add book</a>
+<a href="<%=request.getContextPath()%>/add-book">add book</a><br>
+<a href="<%=request.getContextPath()%>/category">list category</a>
 </body>
 </html>
