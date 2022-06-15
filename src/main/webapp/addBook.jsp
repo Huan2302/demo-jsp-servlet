@@ -21,13 +21,10 @@
             List<CategoryModel> list = (List<CategoryModel>) request.getAttribute("listCategory");
             for (CategoryModel item : list) {
         %>
-        <option value="<%=item.getId()%>"><%=item.getName()%>
-        </option>
+        <option value="<%=item.getId()%>"><%=item.getName()%></option>
         <%
             }
         %>
-
-
     </select>
     <br>
     <input type="submit">

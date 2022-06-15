@@ -4,7 +4,6 @@ import com.example.model.BookModel;
 import com.example.model.CategoryModel;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,8 +14,8 @@ import java.util.List;
 public class BookDAO
     extends BaseDAO {
     public List<BookModel> findAll() {
-        String sql = "SELECT book.id bid, book.name bname, category.id cid, category.name cname "
-            + "FROM book inner join category on book.category_id = category.id";
+        String sql = "SELECT book.id bid, book.name bname, category.id cid, category.name cname"
+            + " FROM book inner join category on book.category_id = category.id";
         try {
             Connection conn = getConnection();
             Statement stmt = conn.createStatement();// tạo kết nối đế truy vấn
@@ -41,7 +40,7 @@ public class BookDAO
     }// 1, sasch a , truyen tranh
 
     public void insert(BookModel bookModel) {
-        String sql = "insert into book(name,category_id) values ( ?, ?)";
+        String sql = "insert into book(name,category_id) values (?, ?)";
         PreparedStatement st = null;
         Connection con = null;
         try {

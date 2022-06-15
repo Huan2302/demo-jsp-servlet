@@ -11,14 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(value = "/add-category")
-public class AddCategoryController
+@WebServlet(value = "/edit-category")
+public class UpdateCategory
     extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException, IOException {
 
-        req.getRequestDispatcher("addCategory.jsp").forward(req, resp);
+        int id = Integer.parseInt(req.getParameter("id"));
+        CategoryModel categoryModel = new CategoryDAO().findOne(id);
+
+        req.setAttribute("nameold", categoryModel.getName());
+
+        req.getRequestDispatcher("updateCategory.jsp").forward(req, resp);
     }
 
     @Override
@@ -26,13 +31,15 @@ public class AddCategoryController
         throws ServletException, IOException {
 
         String name = req.getParameter("name");
+        int id = Integer.parseInt(req.getParameter("id"));
         if (!name.equals("")) {
-            new CategoryDAO().insert(CategoryModel.builder()
+            new CategoryDAO().update(CategoryModel.builder()
+                                                  .id(id)
                                                   .name(name)
                                                   .build());
-            req.setAttribute("success", "Thêm thành công");
+            req.setAttribute("success", "Sửa thành công");
         } else {
-            req.setAttribute("fail", "Thêm thất bại");
+            req.setAttribute("fail", "Sửa thất bại");
         }
 
         req.setAttribute("list", new CategoryDAO().findAll());

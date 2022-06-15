@@ -12,10 +12,30 @@
     <title>Title</title>
 </head>
 <body>
+
+<%
+    String success = (String) request.getAttribute("success");
+    if ( success != null) {
+%>
+    <p style="color: green"><%=success%></p>
+<%
+    }
+%>
+
+<%
+    String fail = (String) request.getAttribute("fail");
+    if ( fail != null) {
+%>
+<p style="color: red"><%=fail%></p>
+<%
+    }
+%>
 <table border="1px">
     <tr>
         <th>Id</th>
         <th>Name</th>
+        <th>Sửa</th>
+        <th>Xoa</th>
     </tr>
     <%
         List<CategoryModel> list = (List<CategoryModel>) request.getAttribute("list");
@@ -26,11 +46,18 @@
         </td>
         <td><%=item.getName()%>
         </td>
+        <td>
+            <a href="<%=request.getContextPath()%>/edit-category?id=<%=item.getId()%>">Sửa</a>
+        </td>
+        <td>
+            <a href="<%=request.getContextPath()%>/del-category?id=<%=item.getId()%>">Xóa</a>
+        </td>
     </tr>
     <%
         }
     %>
 </table>
+
 <a href="<%=request.getContextPath()%>/add-category">add category</a><br>
 <a href="<%=request.getContextPath()%>/home">list book</a>
 </body>

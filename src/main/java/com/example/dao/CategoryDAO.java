@@ -14,7 +14,7 @@ import java.util.List;
 public class CategoryDAO
     extends BaseDAO {
     public List<CategoryModel> findAll() {
-        String sql = "SELECT * FROM category";
+        String sql = "SELECT * FROM category order by id ASC";
         try {
             Connection conn = getConnection();
             Statement stmt = conn.createStatement();// tạo kết nối đế truy vấn
@@ -54,7 +54,7 @@ public class CategoryDAO
         return null;
     }
 
-    public void insert(CategoryModel categoryModel) {
+    public boolean insert(CategoryModel categoryModel) {
         String sql = "insert into category(name) values (?)";
         PreparedStatement st = null;
         Connection con = null;
@@ -63,6 +63,57 @@ public class CategoryDAO
             st = con.prepareStatement(sql);
 
             st.setString(1, categoryModel.getName());
+            return st.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                assert st != null;
+                st.close();
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
+    public boolean update(CategoryModel categoryModel) {
+        String sql = "update category set name = ? where id = ?";
+        PreparedStatement st = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            st = con.prepareStatement(sql);
+
+            st.setString(1, categoryModel.getName());
+            st.setInt(2, categoryModel.getId());
+            return st.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                assert st != null;
+                st.close();
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
+    public void del(int id) {
+        String sql = "DELETE FROM category where id = ?";
+        PreparedStatement st = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            st = con.prepareStatement(sql);
+
+            st.setInt(1, id);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -75,7 +126,6 @@ public class CategoryDAO
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 }
